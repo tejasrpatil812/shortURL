@@ -1,11 +1,14 @@
 package com.tejas.service;
 
-import java.util.List;
+import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import com.tejas.model.Report;
+import com.tejas.model.ReportFormat;
 import com.tejas.model.URL;
+import com.tejas.repo.ReportDao;
 import com.tejas.repo.URLDao;
 
 
@@ -15,49 +18,52 @@ public class URLService {
 	@Autowired
 	URLDao urlDao;
 	
-	public String setUrl(URL url) {
+	@Autowired
+	ReportDao reportDao;
+	
+	//Caching only when URL is not Empty
+	@Cacheable(value="shortURL",unless="#result==null")
+	public URL getUrlByShortUrl(String url) {
+		long id=Helper.toBase10(url.substring(url.length()-7));
+		URL tempURL=urlDao.findOne(id);
+		return tempURL;
+	}
+
+	public URL setUrl(URL url) {
 		URL tempurl=urlDao.save(url);
-		
-		if(tempurl==null)
-			return "Incorrect Input";
-	
-		Helper.incrValue("postCount");
-		String shrt=Helper.toBase62(tempurl.getId());
+		String shrt=Helper.toBase62(tempurl.getId());								//Converting Key into Base62 String
 		String shrturl="https://www."+tempurl.getDomain()+".com/"+Helper.padLeftZeros(shrt,7);
-		tempurl.setShortUrl(shrturl);
-		return urlDao.save(tempurl).getShortUrl();
+		tempurl.setShortUrl(shrturl);												//Creating Short URL from Base62 String and Domain
+		return urlDao.save(tempurl);
 	}
 
-	public List<URL> getUrl() {
-		return urlDao.findAll();
-	}
-
-	@Cacheable(value="urlCache")
-	public String getUrlByShortUrl(String url) {
-		Integer id=Helper.toBase10(url.substring(url.length()-7));
-		URL tempurl=urlDao.findOne(id);
-		return (tempurl!=null)?tempurl.getLongUrl():"Not Found";
-	}
-
-	public String deleteURL(Integer urlID) {
-		urlDao.delete(urlID);
-		return "Success";
-	}
-	
 	@Async
 	public void updateDB(String url) {
-		Helper.incrValue("getCount");
-		Integer id=Helper.toBase10(url.substring(url.length()-7));
-		URL tempurl=urlDao.findOne(id);
-		tempurl.setClickcnt(tempurl.getClickcnt()+1);
-		urlDao.save(tempurl);
+		Report newreport=new Report();												//Updates Database
+		newreport.setShortUrl(url);
+		newreport.setDomain(Helper.getDomainName(url));
+		reportDao.save(newreport);
 	}
 
-	public String reportURL() {
-		Integer getCount=Helper.getValue("getCount");
-		Integer postCount=Helper.getValue("getCount");
-		return "getCount : "+getCount+" postCount : "+postCount;
+	public ReportFormat getReport() {
+		ReportFormat report = new ReportFormat();
+		Date today = new Date();
+		Date yesterday = new Date(today.getTime() - Helper.oneDay);
+		
+		report.setTimestamp(today.toString());
+		report.setTotalGETRequest(reportDao.count());
+		report.setTotalPOSTRequest(urlDao.count());
+		report.setTotalGETRequestinLast24hours(reportDao.getCountOfLatestGET(yesterday));
+		report.setTotalPOSTRequestinLast24hours(urlDao.getCountOfLatestPOST(yesterday));
+		report.setMostRequestedURL(reportDao.getMostReqURL());
+		report.setCountOfMostRequestedURL(reportDao.countByShortUrl(report.getMostRequestedURL()));
+		report.setMostProvidedDomain(urlDao.mostProvidedDomain());
+		report.setCountOfMostProvidedDomain(urlDao.getCountOfMostProvidedDomain(report.getMostProvidedDomain()));
+		report.setMostRequestedDomain(reportDao.mostReqDomain());
+		report.setCountOfMostRequestedDomain(reportDao.getCountofMostRequestedDomain(report.getMostRequestedDomain()));
+		
+		return report;
 	}
-	
+
 
 }

@@ -1,5 +1,6 @@
 package com.tejas.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -10,14 +11,19 @@ import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tejas.service.Helper;
 
+
+@SuppressWarnings("serial")
 @Entity
 @Table(name="URL",schema="shortURL")
-public class URL {
-
+public class URL implements Serializable{
+	
+	@JsonIgnore
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	Integer id;
+	long id;
 	
 	@Column(name="shortURL",unique=true)
 	String shortUrl;
@@ -25,48 +31,37 @@ public class URL {
 	@Column(name="longURL",length=2100)
 	String longUrl;
 	
+	@JsonIgnore
 	@Column(name="createdAt")
-	String createdAt;
-	
+	Date createdAt;
+
 	@Column(name="expiresAt")
-	String expiresAt="7";
+	Date expiresAt=new Date(11);
 	
 	@Column(name="domain")
-	String Domain="default";
-	
-	@Column(name="clicks")
-	Integer clickcnt=0;
+	String domain="tp.pt";
 	
 	@PrePersist
 	public void beforeCreation() {
 		Date tempdate = new Date();
-		this.createdAt = tempdate.toString();
-		this.expiresAt = (new Date(tempdate.getTime()+(Integer.parseInt(this.expiresAt)*24*3600*1000))).toString();
+		this.createdAt = tempdate;
+		this.expiresAt = new Date(tempdate.getTime()+this.expiresAt.getTime()*Helper.oneDay);
 	}
 	
 	public String getDomain() {
-		return Domain;
-	}
-
-
-	public Integer getClickcnt() {
-		return clickcnt;
-	}
-
-	public void setClickcnt(Integer clickcnt) {
-		this.clickcnt = clickcnt;
+		return domain;
 	}
 
 	public void setDomain(String domain) {
-		Domain = domain;
+		this.domain = domain;
 	}
 
 
-	public Integer getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -86,21 +81,20 @@ public class URL {
 		this.longUrl = longUrl;
 	}
 
-	public String getCreatedAt() {
+	public Date getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(String createdAt) {
+	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
 	}
 
-	public String getExpiresAt() {
+	public Date getExpiresAt() {
 		return expiresAt;
 	}
 
-	public void setExpiresAt(String expiresAt) {
+	public void setExpiresAt(Date expiresAt) {
 		this.expiresAt = expiresAt;
 	}
-	
 	
 }
