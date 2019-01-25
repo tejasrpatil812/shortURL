@@ -34,6 +34,9 @@ public class Report implements Serializable{
 		this.reqTime = new Date();
 	}
 		
+	
+	//GETTER and SETTERs
+	
 	public String getDomain() {
 		return domain;
 	}

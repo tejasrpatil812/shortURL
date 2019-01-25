@@ -15,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tejas.service.Helper;
 
 
+
 @SuppressWarnings("serial")
 @Entity
 @Table(name="URL",schema="shortURL")
@@ -48,6 +49,8 @@ public class URL implements Serializable{
 		this.expiresAt = new Date(tempdate.getTime()+this.expiresAt.getTime()*Helper.oneDay);
 	}
 	
+	//GETTER and SETTERs
+
 	public String getDomain() {
 		return domain;
 	}

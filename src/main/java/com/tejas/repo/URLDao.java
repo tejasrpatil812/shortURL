@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.tejas.model.URL;
 
+
 public interface URLDao extends JpaRepository<URL, Long>{
 	
 	URL findByShortUrl(String url);
@@ -20,4 +21,7 @@ public interface URLDao extends JpaRepository<URL, Long>{
 
 	@Query("SELECT COUNT(domain) FROM URL WHERE domain=?1")
 	Long getCountOfMostProvidedDomain(String mostProvidedDomain);
+	
+	@Query(value="SELECT shortURL.URL.domain,COUNT(*) FROM shortURL.URL GROUP BY shortURL.URL.domain ORDER BY COUNT(*) DESC LIMIT 1",nativeQuery=true)
+	java.util.List<String> temp();
 }

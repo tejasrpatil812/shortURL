@@ -19,7 +19,8 @@ public class ReportFormat implements Serializable{
 	String Timestamp;
 	
 	
-	
+	//GETTER and SETTERs
+
 	public String getTimestamp() {
 		return Timestamp;
 	}

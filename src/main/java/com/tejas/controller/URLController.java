@@ -28,9 +28,8 @@ public class URLController {
 	@Autowired
 	URLService urlService;
 	
-	
 	//GET REQUEST FOR SHORT-LONG
-	@ApiOperation(value = "View URL's Info mapped to the provided short URL")
+	@ApiOperation(value = "View URL's Info mapped to the provided short URL", response = URL[].class)
 	@RequestMapping(method=RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<Object> getUrl(@ApiParam(value = "Insert ShortURL", required = true)@RequestParam String shorturl) {
@@ -48,7 +47,7 @@ public class URLController {
 	
 	
 	//POST REQUEST FOR LONG-SHORT
-	@ApiOperation(value = "Provide LongUrl along with optional parameters to be shorten.")
+	@ApiOperation(value = "Provide LongUrl along with optional parameters to be shorten.",response = URL[].class)
 	@RequestMapping(method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<Object> setUrl(@ApiParam(value = "Insert longUrl and optional expiresAt(in days) and domain", required = true)@RequestBody URL URLBody) {
@@ -60,7 +59,7 @@ public class URLController {
 	
 	
 	//GET REQUEST FOR REPORT
-	@ApiOperation(value = "View the Report of the URL Shortner Service.")
+	@ApiOperation(value = "View the Report of the URL Shortner Service.",response = ReportFormat[].class)
 	@RequestMapping(value="/report",method=RequestMethod.GET)
 	@ResponseBody
 	public  ResponseEntity<Object> getReport() {

@@ -1,6 +1,8 @@
 package com.tejas.service;
 
 import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Async;
@@ -24,7 +26,7 @@ public class URLService {
 	//Caching only when URL is not Empty
 	@Cacheable(value="shortURL",unless="#result==null")
 	public URL getUrlByShortUrl(String url) {
-		long id=Helper.toBase10(url.substring(url.length()-7));
+		long id=Helper.toBase10(url.substring(url.length()-7));						//Extracting 7 letters String
 		URL tempURL=urlDao.findOne(id);
 		return tempURL;
 	}
@@ -49,7 +51,6 @@ public class URLService {
 		ReportFormat report = new ReportFormat();
 		Date today = new Date();
 		Date yesterday = new Date(today.getTime() - Helper.oneDay);
-		
 		report.setTimestamp(today.toString());
 		report.setTotalGETRequest(reportDao.count());
 		report.setTotalPOSTRequest(urlDao.count());
