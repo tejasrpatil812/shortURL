@@ -3,14 +3,18 @@ package com.tejas.service;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class Helper {
+public class Convertor {
 	
-	//CONSTANTS
+	/*
+	 * CONSTANTS
+	 */
 	public static final String ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 	public static final Integer BASE = ALPHABET.length();
 	public static final Integer oneDay=(1000 * 60 * 60 * 24);
 	
-	//MAKING 7 LETTER STRING
+	/*
+	 *  For Making Constant 7 letter string
+	 */
 	public static String padLeftZeros(String inputString, int length) {
 	    if (inputString.length() >= length) {
 	        return inputString;
@@ -23,6 +27,9 @@ public class Helper {
 	    return sb.toString();
 	}
 	
+	/*
+	 *	For Converting to Base 62 
+	 */
 	public static String toBase62(long i) {
 		StringBuilder sb = new StringBuilder("");
 		if (i == 0) {
@@ -40,6 +47,9 @@ public class Helper {
 		return i / BASE;
 	}
 	
+	/*
+	 *	For Converting to Base 10 
+	 */
 	public static long toBase10(String str) {
 		int i=0;
 		while(str.charAt(i)=='a')
@@ -59,7 +69,9 @@ public class Helper {
 		return n *  (long)Math.pow(BASE, pow);
 	}
 	
-	//EXTRACTING DOMAIN NAME
+	/*
+	 * 	For Extracting Domain
+	 */
 	public static String getDomainName(String url){
 	    URI uri = null;
 		try {

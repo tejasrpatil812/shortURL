@@ -1,15 +1,15 @@
 package com.tejas.model;
 
 import java.io.Serializable;
-import java.util.Date;
-
+import java.sql.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.PrePersist;
 import javax.persistence.Table;
+
+import com.tejas.service.Convertor;
 
 @SuppressWarnings("serial")
 @Entity
@@ -23,26 +23,51 @@ public class Report implements Serializable{
 	@Column(name="shortURL")
 	String shortUrl;
 	
-	@Column(name="Timestamp")
-	Date reqTime;
+	@Column(name="requestDate")
+	Date requestDate;
 
 	@Column(name="domain")
 	String domain;
 	
-	@PrePersist
-	public void beforeCreation() {
-		this.reqTime = new Date();
-	}
+	@Column(name="cnt")
+	long cnt;
+	
+	public Report() {
 		
+	}
 	
-	//GETTER and SETTERs
-	
+	public Report(String url, Date currDate) {
+		this.shortUrl=url;
+		this.requestDate=currDate;
+		this.domain=Convertor.getDomainName(url);
+		this.cnt=1;
+	}
+
+	/*
+	 * GETTER and SETTERS
+	 */
 	public String getDomain() {
 		return domain;
 	}
 
 	public void setDomain(String domain) {
 		this.domain = domain;
+	}
+	
+	public Date getRequestDate() {
+		return requestDate;
+	}
+
+	public void setRequestDate(Date requestDate) {
+		this.requestDate = requestDate;
+	}
+
+	public long getCnt() {
+		return cnt;
+	}
+
+	public void setCnt(long count) {
+		this.cnt = count;
 	}
 
 	public long getId() {
@@ -59,15 +84,5 @@ public class Report implements Serializable{
 
 	public void setShortUrl(String shortUrl) {
 		this.shortUrl = shortUrl;
-	}
-
-	public Date getReqTime() {
-		return reqTime;
-	}
-
-	public void setReqTime(Date reqTime) {
-		this.reqTime = reqTime;
-	}
-	
-	
+	}	
 }

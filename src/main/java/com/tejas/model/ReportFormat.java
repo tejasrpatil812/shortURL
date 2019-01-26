@@ -1,6 +1,8 @@
 package com.tejas.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 //FOR REPORT FORMATTING
 @SuppressWarnings("serial")
@@ -11,15 +13,15 @@ public class ReportFormat implements Serializable{
 	long TotalGETRequestinLast24hours;
 	long TotalPOSTRequestinLast24hours;
 	String MostRequestedURL;
-	long CountOfMostRequestedURL;
+	BigDecimal CountOfMostRequestedURL;
 	String MostRequestedDomain;
-	long CountOfMostRequestedDomain;
+	BigDecimal CountOfMostRequestedDomain;
 	String MostProvidedDomain;
-	long CountOfMostProvidedDomain;
+	BigInteger CountOfMostProvidedDomain;
 	String Timestamp;
 	
 	
-	//GETTER and SETTERs
+	//GETTER and SETTERS
 
 	public String getTimestamp() {
 		return Timestamp;
@@ -57,10 +59,10 @@ public class ReportFormat implements Serializable{
 	public void setMostRequestedURL(String mostRequestedURL) {
 		MostRequestedURL = mostRequestedURL;
 	}
-	public long getCountOfMostRequestedURL() {
+	public BigDecimal getCountOfMostRequestedURL() {
 		return CountOfMostRequestedURL;
 	}
-	public void setCountOfMostRequestedURL(long countOfMostRequestedURL) {
+	public void setCountOfMostRequestedURL(BigDecimal countOfMostRequestedURL) {
 		CountOfMostRequestedURL = countOfMostRequestedURL;
 	}
 	public String getMostRequestedDomain() {
@@ -69,10 +71,10 @@ public class ReportFormat implements Serializable{
 	public void setMostRequestedDomain(String mostRequestedDomain) {
 		MostRequestedDomain = mostRequestedDomain;
 	}
-	public long getCountOfMostRequestedDomain() {
+	public BigDecimal getCountOfMostRequestedDomain() {
 		return CountOfMostRequestedDomain;
 	}
-	public void setCountOfMostRequestedDomain(long countOfMostRequestedDomain) {
+	public void setCountOfMostRequestedDomain(BigDecimal countOfMostRequestedDomain) {
 		CountOfMostRequestedDomain = countOfMostRequestedDomain;
 	}
 	public String getMostProvidedDomain() {
@@ -81,10 +83,10 @@ public class ReportFormat implements Serializable{
 	public void setMostProvidedDomain(String mostProvidedDomain) {
 		MostProvidedDomain = mostProvidedDomain;
 	}
-	public long getCountOfMostProvidedDomain() {
+	public BigInteger getCountOfMostProvidedDomain() {
 		return CountOfMostProvidedDomain;
 	}
-	public void setCountOfMostProvidedDomain(long countOfMostProviededDomain) {
+	public void setCountOfMostProvidedDomain(BigInteger countOfMostProviededDomain) {
 		CountOfMostProvidedDomain = countOfMostProviededDomain;
 	}
 	

@@ -12,7 +12,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tejas.service.Helper;
+import com.tejas.service.Convertor;
 
 
 
@@ -46,10 +46,12 @@ public class URL implements Serializable{
 	public void beforeCreation() {
 		Date tempdate = new Date();
 		this.createdAt = tempdate;
-		this.expiresAt = new Date(tempdate.getTime()+this.expiresAt.getTime()*Helper.oneDay);
+		this.expiresAt = new Date(tempdate.getTime()+this.expiresAt.getTime()*Convertor.oneDay);
 	}
 	
-	//GETTER and SETTERs
+	/*
+	 * GETTER and SETTERS
+	 */
 
 	public String getDomain() {
 		return domain;

@@ -1,6 +1,7 @@
 package com.tejas.repo;
 
 
+import java.math.BigInteger;
 import java.util.Date;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,14 +12,12 @@ import com.tejas.model.URL;
 
 public interface URLDao extends JpaRepository<URL, Long>{
 	
-	URL findByShortUrl(String url);
-	
 	@Query("SELECT COUNT(id) FROM URL WHERE createdAt>=?1")
-	public long getCountOfLatestPOST(Date yesterday);
+	Long getCountOfLatestPOST(Date yesterday);
 
-	@Query(value="SELECT shortURL.URL.domain FROM shortURL.URL GROUP BY shortURL.URL.domain ORDER BY COUNT(*) DESC LIMIT 1",nativeQuery=true)
-	String mostProvidedDomain();
+	@Query(value="select domain from (select COUNT(id) as cntsum,domain from shortURL.URL group by domain) as temp where cntsum=?1",nativeQuery=true)
+	String mostProvidedDomain(BigInteger bigDecimal);
 
-	@Query("SELECT COUNT(domain) FROM URL WHERE domain=?1")
-	Long getCountOfMostProvidedDomain(String mostProvidedDomain);
+	@Query(value="select max(cntsum) from (select COUNT(id) as cntsum,domain from shortURL.URL group by domain) as temp",nativeQuery=true)
+	BigInteger getCountOfMostProvidedDomain();
 }
